@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class Timetable – CampusConnect</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-icon" style="width: 34px; height: 34px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+          </div>
+          <span class="brand-text">Campus<span>Connect</span></span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav" id="timetableSidebarNav"></nav>
+
+      <div class="sidebar-footer">
+        <div class="user-mini-profile">
+          <div class="user-avatar" id="sidebarUserAvatar">U</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUserName">User</div>
+            <div class="user-role" id="sidebarUserRole">Role</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="btnLogout" onclick="logout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <h2 class="page-title">Weekly Lecture Timetable</h2>
+        </div>
+
+        <div class="topbar-right">
+          <button class="notif-bell-btn" id="notifBellBtn" title="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header">
+              <h4>Campus Notifications</h4>
+            </div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+          <button class="btn btn-primary btn-sm" id="btnOpenAddSlot" style="display: none;">
+            + Add Schedule Slot
+          </button>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <div style="margin-bottom: 1.5rem;">
+          <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem;">
+            Academic Timetable (Monday – Saturday)
+          </h1>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Semester IV Lecture and Laboratory schedule with classroom locations.
+          </p>
+        </div>
+
+        <!-- Filter Toolbar -->
+        <div class="toolbar-card">
+          <div class="toolbar-filters">
+            <select id="ttCourseFilter" class="filter-select">
+              <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Information Technology">Information Technology</option>
+              <option value="Electronics Engineering">Electronics Engineering</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
+            </select>
+
+            <select id="ttYearFilter" class="filter-select">
+              <option value="All">All Years</option>
+              <option value="First Year">First Year</option>
+              <option value="Second Year" selected>Second Year</option>
+              <option value="Third Year">Third Year</option>
+              <option value="Fourth Year">Fourth Year</option>
+            </select>
+          </div>
+          <div>
+            <span class="badge badge-primary">Term Active: 2026–27</span>
+          </div>
+        </div>
+
+        <!-- Timetable Days Grid -->
+        <div class="timetable-grid" id="timetableDaysContainer">
+          <!-- Populated dynamically per day -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Slot Modal (Teacher Only) -->
+  <div class="modal-backdrop" id="addSlotModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Class Slot</h3>
+        <button type="button" class="modal-close" id="closeSlotModal">&times;</button>
+      </div>
+      <form id="addSlotForm" novalidate>
+        <div class="modal-body">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="slotDay" class="form-label">Day *</label>
+              <select id="slotDay" class="form-control" required>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="slotTime" class="form-label">Time Slot *</label>
+              <input type="text" id="slotTime" class="form-control" placeholder="e.g. 09:00 - 10:00 AM" required>
+            </div>
+
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="slotSubject" class="form-label">Subject Name *</label>
+              <input type="text" id="slotSubject" class="form-control" placeholder="e.g. Database Management Systems" required>
+            </div>
+
+            <div class="form-group">
+              <label for="slotCourse" class="form-label">Course *</label>
+              <select id="slotCourse" class="form-control">
+                <option value="Computer Engineering">Computer Engineering</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Electronics Engineering">Electronics Engineering</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="slotYear" class="form-label">Year *</label>
+              <select id="slotYear" class="form-control">
+                <option value="First Year">First Year</option>
+                <option value="Second Year">Second Year</option>
+                <option value="Third Year">Third Year</option>
+                <option value="Fourth Year">Fourth Year</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="slotRoom" class="form-label">Classroom / Lab *</label>
+              <input type="text" id="slotRoom" class="form-control" placeholder="e.g. Room 301 / Lab 2" required>
+            </div>
+
+            <div class="form-group">
+              <label for="slotTeacher" class="form-label">Teacher Name</label>
+              <input type="text" id="slotTeacher" class="form-control" placeholder="e.g. Prof. Rajesh Sharma">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelSlot">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveSlot">Save Schedule</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = protectPage();
+      if (!user) return;
+
+      renderSidebar(user.role);
+
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const courseFilter = document.getElementById('ttCourseFilter');
+      const yearFilter = document.getElementById('ttYearFilter');
+
+      if (user.role === 'Teacher') {
+        const btnAdd = document.getElementById('btnOpenAddSlot');
+        if (btnAdd) btnAdd.style.display = 'inline-flex';
+      }
+
+      courseFilter.addEventListener('change', loadTimetable);
+      yearFilter.addEventListener('change', loadTimetable);
+
+      loadTimetable();
+
+      async function loadTimetable() {
+        const course = courseFilter.value;
+        const year = yearFilter.value;
+        const container = document.getElementById('timetableDaysContainer');
+
+        let url = `/api/timetable?course=${encodeURIComponent(course)}`;
+        if (year !== 'All') url += `&year=${encodeURIComponent(year)}`;
+
+        try {
+          const res = await fetch(url);
+          const data = await res.json();
+          const slots = data.success ? data.data : [];
+
+          container.innerHTML = days.map(day => {
+            const daySlots = slots.filter(s => s.day === day);
+            return `
+              <div class="timetable-day-card animate-fade-in">
+                <div class="timetable-day-header">
+                  <span>${day}</span>
+                  <span class="badge badge-neutral">${daySlots.length} Classes</span>
+                </div>
+                ${daySlots.length > 0 ? daySlots.map(s => `
+                  <div class="class-slot" style="position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                      <div class="class-time">${s.time_slot}</div>
+                      ${user.role === 'Teacher' ? `
+                        <button onclick="deleteSlot(${s.id})" title="Delete slot" style="background: none; border: none; color: var(--danger); cursor: pointer; padding: 2px 4px; font-size: 0.8rem; border-radius: 4px;">✕</button>
+                      ` : ''}
+                    </div>
+                    <div class="class-name">${s.subject_name}</div>
+                    <div class="class-meta">
+                      <span>📍 ${s.room}</span>
+                      <span>👨‍🏫 ${s.teacher_name}</span>
+                    </div>
+                  </div>
+                `).join('') : `<div style="padding: 1.5rem 0; text-align: center; color: var(--text-muted); font-size: 0.85rem;">No scheduled lectures.</div>`}
+              </div>
+            `;
+          }).join('');
+        } catch (e) {
+          console.error('Error loading timetable:', e);
+        }
+      }
+
+      // Add Slot Modal Handlers
+      const slotModal = document.getElementById('addSlotModal');
+      const openSlotBtn = document.getElementById('btnOpenAddSlot');
+      const closeSlotBtn = document.getElementById('closeSlotModal');
+      const cancelSlotBtn = document.getElementById('btnCancelSlot');
+
+      if (openSlotBtn) {
+        openSlotBtn.addEventListener('click', () => slotModal.classList.add('show'));
+      }
+      [closeSlotBtn, cancelSlotBtn].forEach(b => {
+        if (b) b.addEventListener('click', () => slotModal.classList.remove('show'));
+      });
+
+      window.deleteSlot = async function(id) {
+        if (!confirm('Remove this lecture slot from the timetable?')) return;
+        try {
+          const res = await authFetch(`/api/timetable/${id}`, { method: 'DELETE' });
+          const d = await res.json();
+          if (d.success) {
+            showToast('Slot Removed', 'Lecture slot deleted from schedule.', 'success');
+            loadTimetable();
+          } else {
+            showToast('Error', d.message, 'error');
+          }
+        } catch (e) {
+          showToast('Error', 'Failed to delete schedule entry.', 'error');
+        }
+      };
+
+      document.getElementById('addSlotForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+          day: document.getElementById('slotDay').value,
+          time_slot: document.getElementById('slotTime').value.trim(),
+          subject_name: document.getElementById('slotSubject').value.trim(),
+          course: document.getElementById('slotCourse').value,
+          year: document.getElementById('slotYear').value,
+          room: document.getElementById('slotRoom').value.trim(),
+          teacher_name: document.getElementById('slotTeacher').value.trim()
+        };
+
+        try {
+          const res = await authFetch('/api/timetable', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+          });
+          const d = await res.json();
+          if (d.success) {
+            slotModal.classList.remove('show');
+            showToast('Slot Added! 📅', d.message, 'success');
+            loadTimetable();
+          } else {
+            showToast('Error', d.message, 'error');
+          }
+        } catch (err) {
+          showToast('Network Error', 'Failed to add class.', 'error');
+        }
+      });
+
+      function renderSidebar(role) {
+        const nav = document.getElementById('timetableSidebarNav');
+        if (role === 'Teacher') {
+          nav.innerHTML = `
+            <a href="teacher-dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dashboard</span></a>
+            <a href="students.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span>Students</span></a>
+            <a href="attendance.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span>Mark Attendance</span></a>
+            <a href="marks.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg><span>Add Marks</span></a>
+            <a href="timetable.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg><span>Timetable</span></a>
+            <a href="notices.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span>Notices</span></a>
+            <a href="profile.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>My Profile</span></a>
+            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span>Settings</span></a>
+          `;
+        } else {
+          nav.innerHTML = `
+            <a href="student-dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dashboard</span></a>
+            <a href="attendance.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span>My Attendance</span></a>
+            <a href="marks.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg><span>My Results</span></a>
+            <a href="timetable.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg><span>Timetable</span></a>
+            <a href="notices.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span>Notices</span></a>
+            <a href="profile.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>My Profile</span></a>
+            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span>Settings</span></a>
+          `;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

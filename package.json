@@ -1,0 +1,26 @@
+{
+  "name": "campusconnect-college-management-system",
+  "version": "1.0.0",
+  "description": "CampusConnect - Modern College Student Management System",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js",
+    "test": "node test-audit.js"
+  },
+  "keywords": [
+    "college",
+    "student-management",
+    "express",
+    "sqlite"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
+    "sqlite3": "^5.1.7"
+  }
+}

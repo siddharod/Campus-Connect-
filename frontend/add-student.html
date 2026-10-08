@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Student – CampusConnect</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="teacher-dashboard.html" class="brand-logo">
+          <div class="brand-icon" style="width: 34px; height: 34px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <span class="brand-text">Campus<span>Connect</span></span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="teacher-dashboard.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="students.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Students</span>
+        </a>
+
+        <a href="add-student.html" class="nav-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span>Add Student</span>
+        </a>
+
+        <a href="attendance.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+          <span>Mark Attendance</span>
+        </a>
+
+        <a href="marks.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          <span>Add Marks</span>
+        </a>
+
+        <a href="timetable.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span>Timetable</span>
+        </a>
+
+        <a href="notices.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span>Notices</span>
+        </a>
+
+        <a href="profile.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>My Profile</span>
+        </a>
+
+        <a href="settings.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-mini-profile">
+          <div class="user-avatar" id="sidebarUserAvatar">PS</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUserName">Prof. Rajesh Sharma</div>
+            <div class="user-role" id="sidebarUserRole">Teacher</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="btnLogout" onclick="logout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <h2 class="page-title">Add New Student</h2>
+        </div>
+
+        <div class="topbar-right">
+          <a href="students.html" class="btn btn-secondary btn-sm">
+            ← Back to Student List
+          </a>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <div style="max-width: 800px; margin: 0 auto;">
+          <div style="margin-bottom: 1.5rem;">
+            <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem;">
+              Register New Student Record
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">
+              Fill in the academic and personal details below to register an enrolled student into the college database.
+            </p>
+          </div>
+
+          <div class="card" style="padding: 2.25rem;">
+            <form id="standaloneAddStudentForm" novalidate>
+              <div class="form-grid-2">
+                <!-- Full Name -->
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label" for="addName">Full Name *</label>
+                  <input type="text" id="addName" class="form-control" placeholder="e.g. Tanmay Bhatia" required>
+                  <div class="invalid-feedback" id="addNameError">Full name is required.</div>
+                </div>
+
+                <!-- Roll Number -->
+                <div class="form-group">
+                  <label class="form-label" for="addRollNo">Roll Number *</label>
+                  <input type="text" id="addRollNo" class="form-control" placeholder="e.g. CE110" required>
+                  <div class="invalid-feedback" id="addRollNoError">Roll number is required.</div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                  <label class="form-label" for="addEmail">College Email *</label>
+                  <input type="email" id="addEmail" class="form-control" placeholder="tanmay.b@campusconnect.com" required>
+                  <div class="invalid-feedback" id="addEmailError">Valid email address is required.</div>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group">
+                  <label class="form-label" for="addPhone">Phone Number</label>
+                  <input type="tel" id="addPhone" class="form-control" placeholder="e.g. 9819283746">
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="form-group">
+                  <label class="form-label" for="addDob">Date of Birth</label>
+                  <input type="date" id="addDob" class="form-control">
+                </div>
+
+                <!-- Course -->
+                <div class="form-group">
+                  <label class="form-label" for="addCourse">Course *</label>
+                  <select id="addCourse" class="form-control" required>
+                    <option value="">Select Course</option>
+                    <option value="Computer Engineering">Computer Engineering</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Electronics Engineering">Electronics Engineering</option>
+                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                  </select>
+                  <div class="invalid-feedback" id="addCourseError">Please select a course.</div>
+                </div>
+
+                <!-- Year -->
+                <div class="form-group">
+                  <label class="form-label" for="addYear">Academic Year *</label>
+                  <select id="addYear" class="form-control" required>
+                    <option value="">Select Year</option>
+                    <option value="First Year">First Year</option>
+                    <option value="Second Year">Second Year</option>
+                    <option value="Third Year">Third Year</option>
+                    <option value="Fourth Year">Fourth Year</option>
+                  </select>
+                  <div class="invalid-feedback" id="addYearError">Please select an academic year.</div>
+                </div>
+
+                <!-- Division -->
+                <div class="form-group">
+                  <label class="form-label" for="addDivision">Division</label>
+                  <select id="addDivision" class="form-control">
+                    <option value="A">Division A</option>
+                    <option value="B">Division B</option>
+                    <option value="C">Division C</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: flex-end; gap: 1rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-light);">
+                <a href="students.html" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary btn-lg" id="btnSubmitAddPage">
+                  <span id="btnSubmitAddText">Add Student</span>
+                  <span id="btnSubmitAddSpinner" class="spinner" style="width: 18px; height: 18px; border-width: 2px; display: none; margin: 0;"></span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      protectPage('Teacher');
+
+      const form = document.getElementById('standaloneAddStudentForm');
+      const nameInput = document.getElementById('addName');
+      const rollInput = document.getElementById('addRollNo');
+      const emailInput = document.getElementById('addEmail');
+      const phoneInput = document.getElementById('addPhone');
+      const dobInput = document.getElementById('addDob');
+      const courseInput = document.getElementById('addCourse');
+      const yearInput = document.getElementById('addYear');
+      const divisionInput = document.getElementById('addDivision');
+
+      const nameError = document.getElementById('addNameError');
+      const rollError = document.getElementById('addRollNoError');
+      const emailError = document.getElementById('addEmailError');
+      const courseError = document.getElementById('addCourseError');
+      const yearError = document.getElementById('addYearError');
+
+      const submitBtn = document.getElementById('btnSubmitAddPage');
+      const btnText = document.getElementById('btnSubmitAddText');
+      const btnSpinner = document.getElementById('btnSubmitAddSpinner');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        let hasError = false;
+        const name = nameInput.value.trim();
+        const roll_no = rollInput.value.trim();
+        const email = emailInput.value.trim();
+        const phone = phoneInput.value.trim();
+        const date_of_birth = dobInput.value.trim();
+        const course = courseInput.value;
+        const year = yearInput.value;
+        const division = divisionInput.value;
+
+        if (!name) {
+          showError(nameInput, nameError, 'Full name is required.');
+          hasError = true;
+        }
+
+        if (!roll_no) {
+          showError(rollInput, rollError, 'Roll number is required.');
+          hasError = true;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email) {
+          showError(emailInput, emailError, 'Email address is required.');
+          hasError = true;
+        } else if (!emailRegex.test(email)) {
+          showError(emailInput, emailError, 'Please enter a valid email address.');
+          hasError = true;
+        }
+
+        if (!course) {
+          showError(courseInput, courseError, 'Please select a course.');
+          hasError = true;
+        }
+
+        if (!year) {
+          showError(yearInput, yearError, 'Please select an academic year.');
+          hasError = true;
+        }
+
+        if (hasError) return;
+
+        setLoading(true);
+
+        try {
+          const res = await authFetch('/api/students', {
+            method: 'POST',
+            body: JSON.stringify({
+              name,
+              roll_no,
+              email,
+              phone,
+              course,
+              year,
+              division,
+              date_of_birth
+            })
+          });
+
+          const data = await res.json();
+          setLoading(false);
+
+          if (res.ok && data.success) {
+            showToast('Success', 'Student added successfully.', 'success', 2500);
+            setTimeout(() => {
+              window.location.href = 'students.html';
+            }, 1000);
+          } else {
+            showToast('Failed to Add', data.message || 'Error occurred.', 'error');
+            if (data.message && data.message.includes('Roll Number')) {
+              showError(rollInput, rollError, data.message);
+            }
+          }
+        } catch (err) {
+          setLoading(false);
+          console.error(err);
+          showToast('Network Error', 'Failed to communicate with server.', 'error');
+        }
+      });
+
+      function showError(inputEl, errorEl, msg) {
+        inputEl.classList.add('is-invalid');
+        errorEl.textContent = msg;
+        errorEl.classList.add('show');
+      }
+
+      function clearErrors() {
+        [nameInput, rollInput, emailInput, courseInput, yearInput].forEach(el => el.classList.remove('is-invalid'));
+        [nameError, rollError, emailError, courseError, yearError].forEach(el => el.classList.remove('show'));
+      }
+
+      function setLoading(isLoading) {
+        if (isLoading) {
+          submitBtn.disabled = true;
+          btnText.style.display = 'none';
+          btnSpinner.style.display = 'inline-block';
+        } else {
+          submitBtn.disabled = false;
+          btnText.style.display = 'inline-block';
+          btnSpinner.style.display = 'none';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marks & Results – CampusConnect</title>
+  <meta name="description" content="View examination grades, automated CGPA calculations, and manage academic scores.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Dark Navy Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-icon" style="width: 34px; height: 34px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+          </div>
+          <span class="brand-text">Campus<span>Connect</span></span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav" id="marksSidebarNav"></nav>
+
+      <div class="sidebar-footer">
+        <div class="user-mini-profile">
+          <div class="user-avatar" id="sidebarUserAvatar">U</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUserName">User</div>
+            <div class="user-role" id="sidebarUserRole">Role</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="btnLogout" onclick="logout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <h2 class="page-title">Marks & Evaluation Portal</h2>
+        </div>
+
+        <div class="topbar-right">
+          <button class="notif-bell-btn" id="notifBellBtn" title="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header"><h4>Campus Notifications</h4></div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <!-- ==========================================
+             TEACHER MARKS ENTRY VIEW
+        =========================================== -->
+        <div id="teacherMarksView" style="display: none;">
+          <div style="margin-bottom: 1.5rem;">
+            <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 0.25rem;">
+              Academic Evaluation & Marks
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">
+              Record internal assessments, end-semester exam scores, and automated grade evaluations.
+            </p>
+          </div>
+
+          <!-- Add Marks Card Form -->
+          <div class="card" style="margin-bottom: 2rem;">
+            <div class="content-card-header">
+              <h3 class="content-card-title">Enter Student Subject Marks</h3>
+            </div>
+            <form id="teacherMarksForm" novalidate>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="selectStudent" class="form-label">Select Student *</label>
+                  <select id="selectStudent" class="form-control" required></select>
+                </div>
+
+                <div class="form-group">
+                  <label for="selectSubject" class="form-label">Select Subject *</label>
+                  <select id="selectSubject" class="form-control" required></select>
+                </div>
+
+                <div class="form-group">
+                  <label for="internalMarks" class="form-label">Internal Marks (Max 40)</label>
+                  <input type="number" id="internalMarks" class="form-control" min="0" max="40" step="0.5" placeholder="e.g. 35" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="externalMarks" class="form-label">External / Theory Marks (Max 60)</label>
+                  <input type="number" id="externalMarks" class="form-control" min="0" max="60" step="0.5" placeholder="e.g. 52" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="examTerm" class="form-label">Evaluation Term</label>
+                  <select id="examTerm" class="form-control">
+                    <option value="Semester IV (Regular)">Semester IV (Regular)</option>
+                    <option value="Semester III (Regular)">Semester III (Regular)</option>
+                    <option value="Internal Assessment 1">Internal Assessment 1</option>
+                  </select>
+                </div>
+
+                <div class="form-group" style="display: flex; flex-direction: column; justify-content: flex-end;">
+                  <div style="background-color: var(--border-light); padding: 0.7rem 1rem; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: 700; font-size: 0.85rem;">Total & Grade:</span>
+                    <span id="previewTotalGrade" style="font-weight: 800; color: var(--coral);">0/100 (Grade: --)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary" id="btnSubmitMarks">
+                  <span id="btnSubmitMarksText">💾 Save Marks Record</span>
+                  <span id="btnSubmitMarksSpinner" class="spinner" style="width: 16px; height: 16px; border-width: 2px; display: none; margin: 0;"></span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Existing Marks Records Table -->
+          <div class="table-container">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Roll No</th>
+                    <th>Subject</th>
+                    <th style="text-align: center;">Internal (/40)</th>
+                    <th style="text-align: center;">External (/60)</th>
+                    <th style="text-align: center;">Total (/100)</th>
+                    <th style="text-align: center;">Grade</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="teacherMarksTableBody">
+                  <tr><td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">Loading marks database...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             STUDENT REPORT CARD VIEW
+        =========================================== -->
+        <div id="studentMarksView" style="display: none;">
+          <div style="margin-bottom: 1.5rem;">
+            <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 0.25rem;">
+              My Academic Report Card
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">
+              Official examination performance record. CGPA calculated strictly from verified marks.
+            </p>
+          </div>
+
+          <!-- Performance Metric Cards -->
+          <div class="stats-grid" style="margin-bottom: 2rem;">
+            <div class="stat-card animate-fade-in">
+              <div class="stat-info">
+                <div class="stat-label">Semester CGPA</div>
+                <div class="stat-value" id="studentCgpaVal" style="color: var(--coral);">--</div>
+                <div class="stat-sub">10.0 Grade Point Scale</div>
+              </div>
+              <div class="stat-icon icon-purple">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-1">
+              <div class="stat-info">
+                <div class="stat-label">Average Score</div>
+                <div class="stat-value" id="studentAvgScoreVal" style="color: var(--teal);">--</div>
+                <div class="stat-sub">Across evaluated courses</div>
+              </div>
+              <div class="stat-icon icon-emerald">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-2">
+              <div class="stat-info">
+                <div class="stat-label">Evaluation Standing</div>
+                <div class="stat-value" id="studentStandingVal" style="font-size: 1.25rem; color: var(--deep-navy);">--</div>
+                <div class="stat-sub">Academic Year 2026–27</div>
+              </div>
+              <div class="stat-icon icon-blue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Academic Marks Report Card Table -->
+          <div class="card animate-fade-in animate-delay-2" style="margin-bottom: 2rem;">
+            <div class="content-card-header">
+              <h3 class="content-card-title">Subject-Wise Performance Table</h3>
+              <span class="badge badge-success" id="studentTermBadge">Official Record</span>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Subject Code</th>
+                    <th>Subject Name</th>
+                    <th style="text-align: center;">Credits</th>
+                    <th style="text-align: center;">Internal (/40)</th>
+                    <th style="text-align: center;">External (/60)</th>
+                    <th style="text-align: center;">Total (/100)</th>
+                    <th style="text-align: center;">Grade</th>
+                    <th style="text-align: center;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="studentReportTableBody">
+                  <tr><td colspan="8" style="text-align: center; padding: 2rem;">Loading academic transcript...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Subject Marks Bar Chart -->
+          <div class="card animate-fade-in animate-delay-3">
+            <div class="content-card-header">
+              <h3 class="content-card-title">Subject Marks Visualizer</h3>
+            </div>
+            <div class="bar-chart-container" id="studentMarksChartContainer"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = protectPage();
+      if (!user) return;
+
+      renderSidebar(user.role);
+
+      if (user.role === 'Teacher') {
+        initTeacherView();
+      } else {
+        initStudentView(user);
+      }
+
+      function renderSidebar(role) {
+        const nav = document.getElementById('marksSidebarNav');
+        if (role === 'Teacher') {
+          nav.innerHTML = `
+            <a href="teacher-dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dashboard</span></a>
+            <a href="students.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span>Students</span></a>
+            <a href="attendance.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span>Mark Attendance</span></a>
+            <a href="marks.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg><span>Add Marks</span></a>
+            <a href="timetable.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg><span>Timetable</span></a>
+            <a href="notices.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span>Notices</span></a>
+            <a href="profile.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>My Profile</span></a>
+            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span>Settings</span></a>
+          `;
+        } else {
+          nav.innerHTML = `
+            <a href="student-dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dashboard</span></a>
+            <a href="attendance.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span>My Attendance</span></a>
+            <a href="marks.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg><span>My Results</span></a>
+            <a href="timetable.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg><span>Timetable</span></a>
+            <a href="notices.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span>Notices</span></a>
+            <a href="profile.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>My Profile</span></a>
+            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span>Settings</span></a>
+          `;
+        }
+      }
+
+      // TEACHER LOGIC
+      async function initTeacherView() {
+        document.getElementById('teacherMarksView').style.display = 'block';
+
+        const studentSelect = document.getElementById('selectStudent');
+        const subjectSelect = document.getElementById('selectSubject');
+        const internalInp = document.getElementById('internalMarks');
+        const externalInp = document.getElementById('externalMarks');
+        const previewEl = document.getElementById('previewTotalGrade');
+
+        // Populate students & subjects
+        const [stRes, subRes] = await Promise.all([
+          authFetch('/api/students'),
+          authFetch('/api/subjects')
+        ]);
+        const stData = await stRes.json();
+        const subData = await subRes.json();
+
+        if (stData.success && stData.data.length > 0) {
+          studentSelect.innerHTML = stData.data.map(s => `<option value="${s.id}">${s.name} (${s.roll_no}) - ${s.course}</option>`).join('');
+        }
+        if (subData.success && subData.data.length > 0) {
+          subjectSelect.innerHTML = subData.data.map(s => `<option value="${s.id}">${s.name} (${s.code})</option>`).join('');
+        }
+
+        function updatePreview() {
+          const int = parseFloat(internalInp.value) || 0;
+          const ext = parseFloat(externalInp.value) || 0;
+          const total = int + ext;
+          let grade = 'F';
+          if (total >= 90) grade = 'A+';
+          else if (total >= 80) grade = 'A';
+          else if (total >= 70) grade = 'B+';
+          else if (total >= 60) grade = 'B';
+          else if (total >= 50) grade = 'C';
+          else if (total >= 40) grade = 'D';
+
+          previewEl.textContent = `${total}/100 (Grade: ${grade})`;
+        }
+
+        internalInp.addEventListener('input', updatePreview);
+        externalInp.addEventListener('input', updatePreview);
+
+        loadAllMarksTable();
+
+        document.getElementById('teacherMarksForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const student_id = studentSelect.value;
+          const subject_id = subjectSelect.value;
+          const internal_marks = internalInp.value;
+          const external_marks = externalInp.value;
+          const exam_term = document.getElementById('examTerm').value;
+
+          const btn = document.getElementById('btnSubmitMarks');
+          const text = document.getElementById('btnSubmitMarksText');
+          const spin = document.getElementById('btnSubmitMarksSpinner');
+          btn.disabled = true;
+          text.style.display = 'none';
+          spin.style.display = 'inline-block';
+
+          try {
+            const res = await authFetch('/api/marks', {
+              method: 'POST',
+              body: JSON.stringify({ student_id, subject_id, internal_marks, external_marks, exam_term })
+            });
+            const data = await res.json();
+            btn.disabled = false;
+            text.style.display = 'inline-block';
+            spin.style.display = 'none';
+
+            if (res.ok && data.success) {
+              showToast('Marks Recorded! ✅', data.message, 'success');
+              internalInp.value = '';
+              externalInp.value = '';
+              previewEl.textContent = '0/100 (Grade: --)';
+              loadAllMarksTable();
+            } else {
+              showToast('Error', data.message || 'Failed to save marks.', 'error');
+            }
+          } catch (err) {
+            btn.disabled = false;
+            text.style.display = 'inline-block';
+            spin.style.display = 'none';
+            showToast('Network Error', 'Could not record marks.', 'error');
+          }
+        });
+
+        async function loadAllMarksTable() {
+          const tbody = document.getElementById('teacherMarksTableBody');
+          try {
+            const res = await authFetch('/api/marks');
+            const data = await res.json();
+            if (data.success && data.data.length > 0) {
+              tbody.innerHTML = data.data.map(m => `
+                <tr>
+                  <td><strong>${m.student_name}</strong></td>
+                  <td><code>${m.roll_no}</code></td>
+                  <td>${m.subject_name} <span style="font-size: 0.75rem; color: var(--text-muted);">(${m.subject_code})</span></td>
+                  <td style="text-align: center;">${m.internal_marks}</td>
+                  <td style="text-align: center;">${m.external_marks}</td>
+                  <td style="text-align: center; font-weight: 800; color: var(--deep-navy);">${m.total_marks}</td>
+                  <td style="text-align: center;"><span class="badge badge-primary">${m.grade}</span></td>
+                  <td style="text-align: right;">
+                    <button class="btn-action btn-action-delete" onclick="deleteMarkRecord(${m.id})" title="Delete mark">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </td>
+                </tr>
+              `).join('');
+            } else {
+              tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">No marks recorded yet.</td></tr>`;
+            }
+          } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2rem; color: var(--coral);">Failed to load marks.</td></tr>`;
+          }
+        }
+
+        window.deleteMarkRecord = async function(id) {
+          if (!confirm('Are you sure you want to delete this marks entry?')) return;
+          try {
+            const res = await authFetch(`/api/marks/${id}`, { method: 'DELETE' });
+            const d = await res.json();
+            if (d.success) {
+              showToast('Deleted', d.message, 'success');
+              loadAllMarksTable();
+            }
+          } catch (e) {
+            showToast('Error', 'Failed to delete mark.', 'error');
+          }
+        };
+      }
+
+      // STUDENT LOGIC
+      async function initStudentView(u) {
+        document.getElementById('studentMarksView').style.display = 'block';
+
+        let studentId = u.profile ? u.profile.id : null;
+        if (!studentId) {
+          try {
+            const meRes = await authFetch('/api/users/me');
+            const meData = await meRes.json();
+            if (meData.success && meData.profile && meData.profile.id) {
+              studentId = meData.profile.id;
+              u.profile = meData.profile;
+              setCurrentUser(u);
+            }
+          } catch (e) {}
+        }
+
+        const cgpaEl = document.getElementById('studentCgpaVal');
+        const avgEl = document.getElementById('studentAvgScoreVal');
+        const standingEl = document.getElementById('studentStandingVal');
+        const tbody = document.getElementById('studentReportTableBody');
+        const chartBox = document.getElementById('studentMarksChartContainer');
+
+        if (!studentId) {
+          // New student clean empty state per requirement 2 & 7
+          cgpaEl.textContent = '--';
+          avgEl.textContent = '--';
+          standingEl.textContent = 'No marks available';
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">No marks available.</td></tr>`;
+          chartBox.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-muted);">No examination scores uploaded yet.</div>`;
+          return;
+        }
+
+        try {
+          const res = await authFetch(`/api/marks/student/${studentId}`);
+          const data = await res.json();
+          if (data.success) {
+            const d = data.data;
+            if (d.hasMarks && d.marks.length > 0) {
+              animateCount(cgpaEl, d.cgpa, 1000);
+              animateCount(avgEl, `${d.averageScore}%`, 1000);
+
+              // Calculate standing from actual CGPA
+              let standingText = 'First Class Distinction';
+              if (d.cgpa < 6.0) standingText = 'Pass Class';
+              else if (d.cgpa < 7.5) standingText = 'First Class';
+              standingEl.textContent = standingText;
+
+              tbody.innerHTML = d.marks.map(m => `
+                <tr>
+                  <td><code>${m.subject_code}</code></td>
+                  <td><strong>${m.subject_name}</strong></td>
+                  <td style="text-align: center;">${m.credits || 3}</td>
+                  <td style="text-align: center;">${m.internal_marks} / 40</td>
+                  <td style="text-align: center;">${m.external_marks} / 60</td>
+                  <td style="text-align: center; font-weight: 800; color: var(--deep-navy);">${m.total_marks} / 100</td>
+                  <td style="text-align: center;"><span class="badge ${m.total_marks >= 75 ? 'badge-success' : 'badge-primary'}">${m.grade}</span></td>
+                  <td style="text-align: center;"><span class="badge ${m.total_marks >= 40 ? 'badge-success' : 'badge-danger'}">${m.total_marks >= 40 ? 'Passed' : 'Failed'}</span></td>
+                </tr>
+              `).join('');
+
+              chartBox.innerHTML = d.marks.map(m => `
+                <div class="bar-item">
+                  <div class="bar-info">
+                    <span>${m.subject_name} (${m.subject_code})</span>
+                    <span style="color: var(--teal);">${m.total_marks}/100 • Grade ${m.grade}</span>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: ${m.total_marks}%;"></div>
+                  </div>
+                </div>
+              `).join('');
+            } else {
+              // Exact requirement 7: CGPA -> "--", "No marks available"
+              cgpaEl.textContent = '--';
+              avgEl.textContent = '--';
+              standingEl.textContent = 'No marks available';
+              tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">No marks available.</td></tr>`;
+              chartBox.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-muted);">No examination scores uploaded yet.</div>`;
+            }
+          }
+        } catch (e) {
+          console.error('Error loading report card:', e);
+          cgpaEl.textContent = '--';
+          avgEl.textContent = '--';
+          standingEl.textContent = 'No marks available';
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">No marks available.</td></tr>`;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

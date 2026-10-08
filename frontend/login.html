@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – CampusConnect</title>
+  <meta name="description" content="Sign in to your CampusConnect Student or Teacher portal.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <span class="brand-text">Campus<span>Connect</span></span>
+        </a>
+        <h1 id="loginGreeting">Welcome Back</h1>
+        <p>Please enter your credentials to access your portal</p>
+      </div>
+
+      <form id="loginForm" class="auth-form" novalidate>
+        <!-- Role Selection -->
+        <div class="form-group">
+          <label class="form-label">Select Your Role</label>
+          <div class="role-selector" id="roleSelector">
+            <button type="button" class="role-tab active" data-role="Teacher" id="tabRoleTeacher">
+              👨‍🏫 Teacher / Faculty
+            </button>
+            <button type="button" class="role-tab" data-role="Student" id="tabRoleStudent">
+              🎓 Student
+            </button>
+          </div>
+          <input type="hidden" id="selectedRole" name="role" value="Teacher">
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            class="form-control" 
+            placeholder="name@campusconnect.com" 
+            required
+            autocomplete="email"
+          >
+          <div class="invalid-feedback" id="emailError">Please enter a valid email address.</div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <div class="form-label">
+            <label for="password">Password</label>
+            <a href="forgot-password.html" id="forgotPasswordLink" style="font-size: 0.8rem; color: var(--primary); font-weight: 500;">Forgot Password?</a>
+          </div>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="form-control" 
+            placeholder="••••••••" 
+            required
+            autocomplete="current-password"
+          >
+          <div class="invalid-feedback" id="passwordError">Password is required.</div>
+        </div>
+
+        <!-- Remember Me Checkbox -->
+        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.875rem;">
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--text-secondary);">
+            <input type="checkbox" id="rememberMe" style="cursor: pointer; accent-color: var(--primary);" checked>
+            Remember me on this browser
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary btn-lg" id="btnLoginSubmit" style="width: 100%;">
+          <span id="btnText">Sign In to Portal</span>
+          <span id="btnSpinner" class="spinner" style="width: 18px; height: 18px; border-width: 2px; display: none; margin: 0;"></span>
+        </button>
+
+        <div style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+          Don't have an account? <a href="register.html" style="color: var(--primary); font-weight: 600;">Register here</a>
+        </div>
+
+        <!-- Quick Demo Accounts -->
+        <div class="demo-accounts">
+          <div class="demo-accounts-title">Quick Demo Login (Click to Fill)</div>
+          <div class="demo-buttons-group">
+            <button type="button" class="demo-pill" id="demoTeacherBtn">
+              👨‍🏫 Fill Teacher (Rajesh Sharma)
+            </button>
+            <button type="button" class="demo-pill" id="demoStudentBtn">
+              🎓 Fill Student (Rahul Sharma)
+            </button>
+          </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="auth-footer">
+          <a href="index.html" class="back-home-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to Home
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

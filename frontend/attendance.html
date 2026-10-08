@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Management – CampusConnect</title>
+  <meta name="description" content="Real-time classroom lecture attendance tracking and subject-wise compliance reports.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Dark Navy Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-icon" style="width: 34px; height: 34px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+          </div>
+          <span class="brand-text">Campus<span>Connect</span></span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav" id="attendanceSidebarNav"></nav>
+
+      <div class="sidebar-footer">
+        <div class="user-mini-profile">
+          <div class="user-avatar" id="sidebarUserAvatar">U</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUserName">User</div>
+            <div class="user-role" id="sidebarUserRole">Member</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="btnLogout" onclick="logout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <h2 class="page-title" id="pageTitleAttendance">Attendance Portal</h2>
+        </div>
+
+        <div class="topbar-right">
+          <button class="notif-bell-btn" id="notifBellBtn" title="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header"><h4>Campus Notifications</h4></div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <!-- ==========================================
+             TEACHER ATTENDANCE MARKING WORKFLOW
+        =========================================== -->
+        <div id="teacherAttendanceView" style="display: none;">
+          <div style="margin-bottom: 1.5rem;">
+            <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 0.25rem;">
+              Mark Lecture Attendance
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">
+              Follow the academic workflow: Course → Year → Division → Subject → Date → Roster → Save.
+            </p>
+          </div>
+
+          <!-- Structured Filter Workflow Toolbar -->
+          <div class="toolbar-card" style="gap: 1rem;">
+            <div class="toolbar-filters" style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
+              <!-- 1. Course -->
+              <select id="attCourseSelect" class="filter-select" title="Select Course">
+                <option value="Computer Engineering">Computer Engineering</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Electronics Engineering">Electronics Engineering</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+              </select>
+
+              <!-- 2. Year -->
+              <select id="attYearSelect" class="filter-select" title="Select Year">
+                <option value="First Year">First Year</option>
+                <option value="Second Year" selected>Second Year</option>
+                <option value="Third Year">Third Year</option>
+                <option value="Fourth Year">Fourth Year</option>
+              </select>
+
+              <!-- 3. Division -->
+              <select id="attDivisionSelect" class="filter-select" title="Select Division">
+                <option value="A" selected>Division A</option>
+                <option value="B">Division B</option>
+                <option value="C">Division C</option>
+              </select>
+
+              <!-- 4. Subject -->
+              <select id="attSubjectSelect" class="filter-select" title="Select Subject" style="min-width: 220px;">
+                <!-- Populated dynamically from /api/subjects -->
+              </select>
+
+              <!-- 5. Date -->
+              <input type="date" id="attDateSelect" class="filter-select" style="font-family: inherit;">
+
+              <button type="button" class="btn btn-secondary btn-sm" id="btnMarkAllPresent" title="Mark all students Present">
+                ✓ Mark All Present
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" id="btnMarkAllAbsent" title="Mark all students Absent">
+                ✗ Mark All Absent
+              </button>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="btnSaveAttendance">
+              <span id="btnSaveAttText">💾 Save Attendance</span>
+              <span id="btnSaveAttSpinner" class="spinner" style="width: 16px; height: 16px; border-width: 2px; display: none; margin: 0;"></span>
+            </button>
+          </div>
+
+          <!-- Students Attendance Roster Table -->
+          <div class="table-container">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Roll No</th>
+                    <th>Student Name</th>
+                    <th>Cohort / Division</th>
+                    <th>Prior Attendance</th>
+                    <th style="text-align: center;">Mark Attendance</th>
+                  </tr>
+                </thead>
+                <tbody id="teacherAttendanceTableBody">
+                  <tr>
+                    <td colspan="5" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                      Loading student roster...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             STUDENT ATTENDANCE BALANCED REPORT VIEW
+        =========================================== -->
+        <div id="studentAttendanceView" style="display: none;">
+          <div style="margin-bottom: 1.5rem;">
+            <h1 style="font-size: 1.65rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 0.25rem;">
+              My Attendance Overview
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">
+              Keep an eye on your attendance. Maintain a minimum of 75% compliance across all theory and lab modules.
+            </p>
+          </div>
+
+          <!-- Overall Attendance Overview Card -->
+          <div class="card animate-fade-in" style="margin-bottom: 2rem; padding: 1.75rem 2rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem;">
+              <!-- Circular Gauge -->
+              <div style="display: flex; align-items: center; gap: 1.75rem;">
+                <div class="progress-circle-wrap" style="margin: 0; width: 120px; height: 120px;">
+                  <svg class="progress-circle-svg" viewBox="0 0 140 140">
+                    <circle class="progress-circle-bg" cx="70" cy="70" r="60"></circle>
+                    <circle class="progress-circle-bar" id="studentAttRing" cx="70" cy="70" r="60"></circle>
+                  </svg>
+                  <div class="progress-circle-text">
+                    <div class="progress-circle-value" id="studentOverallAttVal" style="font-size: 1.65rem;">0%</div>
+                    <div class="progress-circle-label">Attendance</div>
+                  </div>
+                </div>
+
+                <div>
+                  <div id="studentAttStatusBadge" style="margin-bottom: 0.5rem;">
+                    <span class="badge badge-neutral">No attendance records yet</span>
+                  </div>
+                  <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--deep-navy); margin-bottom: 0.25rem;" id="studentAttHeadline">
+                    No Attendance Logged
+                  </h3>
+                  <p style="font-size: 0.875rem; color: var(--text-secondary);" id="studentAttStatsRatio">
+                    0 attended of 0 total lectures conducted
+                  </p>
+                </div>
+              </div>
+
+              <!-- Quick Metrics Grid -->
+              <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                <div style="background-color: var(--border-light); padding: 1rem 1.25rem; border-radius: var(--radius-md); text-align: center; min-width: 100px;">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Total</span>
+                  <div style="font-size: 1.5rem; font-weight: 800; color: var(--deep-navy);" id="metricTotalLectures">0</div>
+                </div>
+                <div style="background-color: var(--success-light); padding: 1rem 1.25rem; border-radius: var(--radius-md); text-align: center; min-width: 100px;">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: var(--teal); text-transform: uppercase;">Attended</span>
+                  <div style="font-size: 1.5rem; font-weight: 800; color: var(--teal);" id="metricAttendedLectures">0</div>
+                </div>
+                <div style="background-color: var(--danger-light); padding: 1rem 1.25rem; border-radius: var(--radius-md); text-align: center; min-width: 100px;">
+                  <span style="font-size: 0.75rem; font-weight: 700; color: var(--coral); text-transform: uppercase;">Absent</span>
+                  <div style="font-size: 1.5rem; font-weight: 800; color: var(--coral);" id="metricAbsentLectures">0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subject-Wise Attendance Breakdown Table & Progress Bars -->
+          <div class="card animate-fade-in animate-delay-1" style="margin-bottom: 2rem;">
+            <div class="content-card-header">
+              <h3 class="content-card-title">Subject-Wise Attendance Breakdown</h3>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Minimum 75% required per subject</span>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>Code</th>
+                    <th style="text-align: center;">Lectures</th>
+                    <th style="text-align: center;">Attended</th>
+                    <th style="text-align: center;">Absent</th>
+                    <th style="text-align: center;">Percentage</th>
+                    <th style="min-width: 160px;">Progress</th>
+                    <th style="text-align: center;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="studentSubjectAttTableBody">
+                  <tr><td colspan="8" style="text-align: center; padding: 2rem;">Loading subjects...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Attendance History Records Log -->
+          <div class="card animate-fade-in animate-delay-2">
+            <div class="content-card-header">
+              <h3 class="content-card-title">Recent Lecture Attendance Log</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Subject</th>
+                    <th style="text-align: center;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="studentHistoryTableBody">
+                  <tr><td colspan="3" style="text-align: center; padding: 2rem;">Loading attendance log...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = protectPage();
+      if (!user) return;
+
+      renderSidebar(user.role);
+
+      if (user.role === 'Teacher') {
+        initTeacherView();
+      } else {
+        initStudentView(user);
+      }
+
+      function renderSidebar(role) {
+        const nav = document.getElementById('attendanceSidebarNav');
+        if (role === 'Teacher') {
+          nav.innerHTML = `
+            <a href="teacher-dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dashboard</span></a>
+            <a href="students.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span>Students</span></a>
+            <a href="attendance.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span>Mark Attendance</span></a>
+            <a href="marks.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg><span>Add Marks</span></a>
+            <a href="timetable.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg><span>Timetable</span></a>
+            <a href="notices.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span>Notices</span></a>
+            <a href="profile.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>My Profile</span></a>
+            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span>Settings</span></a>
+          `;
+        } else {
+          nav.innerHTML = `
+            <a href="student-dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dashboard</span></a>
+            <a href="attendance.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span>My Attendance</span></a>
+            <a href="marks.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg><span>My Results</span></a>
+            <a href="timetable.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg><span>Timetable</span></a>
+            <a href="notices.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span>Notices</span></a>
+            <a href="profile.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>My Profile</span></a>
+            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span>Settings</span></a>
+          `;
+        }
+      }
+
+      // TEACHER WORKFLOW LOGIC
+      async function initTeacherView() {
+        document.getElementById('teacherAttendanceView').style.display = 'block';
+        document.getElementById('pageTitleAttendance').textContent = 'Classroom Attendance Management';
+
+        const courseSelect = document.getElementById('attCourseSelect');
+        const yearSelect = document.getElementById('attYearSelect');
+        const divisionSelect = document.getElementById('attDivisionSelect');
+        const subjectSelect = document.getElementById('attSubjectSelect');
+        const dateInput = document.getElementById('attDateSelect');
+
+        // Set default date to today
+        dateInput.value = new Date().toISOString().split('T')[0];
+
+        async function loadSubjects() {
+          const course = courseSelect.value;
+          const year = yearSelect.value;
+          const res = await authFetch(`/api/subjects?course=${encodeURIComponent(course)}&year=${encodeURIComponent(year)}`);
+          const data = await res.json();
+          if (data.success && data.data.length > 0) {
+            subjectSelect.innerHTML = data.data.map(s => `
+              <option value="${s.id}">${s.name} (${s.code})</option>
+            `).join('');
+          } else {
+            subjectSelect.innerHTML = `<option value="">No subjects found</option>`;
+          }
+          loadStudentRoster();
+        }
+
+        courseSelect.addEventListener('change', loadSubjects);
+        yearSelect.addEventListener('change', loadSubjects);
+        divisionSelect.addEventListener('change', loadStudentRoster);
+        dateInput.addEventListener('change', loadStudentRoster);
+        await loadSubjects();
+
+        async function loadStudentRoster() {
+          const course = courseSelect.value;
+          const year = yearSelect.value;
+          const division = divisionSelect.value;
+          const subjectId = subjectSelect.value;
+          const date = dateInput.value;
+
+          const tbody = document.getElementById('teacherAttendanceTableBody');
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);"><div class="spinner spinner-primary"></div><div style="margin-top:0.5rem;">Loading student roster...</div></td></tr>`;
+
+          // Fetch students of this cohort
+          const res = await authFetch(`/api/students?course=${encodeURIComponent(course)}&year=${encodeURIComponent(year)}&division=${encodeURIComponent(division)}`);
+          const data = await res.json();
+
+          // Fetch existing attendance records for this date + subject to pre-fill status
+          let existingMap = {};
+          if (subjectId && date) {
+            try {
+              const attCheck = await authFetch(`/api/attendance?subject_id=${subjectId}&date=${date}`);
+              const attData = await attCheck.json();
+              if (attData.success) {
+                attData.data.forEach(r => {
+                  existingMap[r.student_id] = r.status;
+                });
+              }
+            } catch (e) {}
+          }
+
+          if (data.success && data.data.length > 0) {
+            tbody.innerHTML = data.data.map(s => {
+              const currentStatus = existingMap[s.id] || 'Present';
+              const attPct = s.has_attendance ? `${s.attendance_percentage}%` : '0%';
+              const attClass = s.attendance_percentage >= 75 ? 'badge-success' : (s.attendance_percentage >= 65 ? 'badge-warning' : 'badge-danger');
+
+              return `
+                <tr>
+                  <td><code style="font-weight: 700; color: var(--deep-navy);">${s.roll_no}</code></td>
+                  <td>
+                    <div class="student-name-cell">
+                      <div class="student-avatar">${s.name.substring(0, 2).toUpperCase()}</div>
+                      <div>
+                        <strong>${s.name}</strong>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">${s.email}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="badge badge-secondary">${s.course} (${s.year} - Div ${s.division})</span></td>
+                  <td><span class="badge ${s.has_attendance ? attClass : 'badge-neutral'}">${attPct}</span></td>
+                  <td style="text-align: center;">
+                    <label style="margin-right: 1.25rem; cursor: pointer; font-weight: 700; color: var(--teal);">
+                      <input type="radio" name="att_status_${s.id}" value="Present" ${currentStatus === 'Present' ? 'checked' : ''} data-student-id="${s.id}" style="accent-color: var(--teal); margin-right: 4px;"> Present
+                    </label>
+                    <label style="cursor: pointer; font-weight: 700; color: var(--coral);">
+                      <input type="radio" name="att_status_${s.id}" value="Absent" ${currentStatus === 'Absent' ? 'checked' : ''} data-student-id="${s.id}" style="accent-color: var(--coral); margin-right: 4px;"> Absent
+                    </label>
+                  </td>
+                </tr>
+              `;
+            }).join('');
+          } else {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 2.5rem; color: var(--text-muted);">No enrolled students found for ${course} (${year}, Div ${division}).</td></tr>`;
+          }
+        }
+
+        document.getElementById('btnMarkAllPresent').addEventListener('click', () => {
+          document.querySelectorAll('input[type="radio"][value="Present"]').forEach(r => r.checked = true);
+          showToast('Updated', 'All students marked as Present.', 'info', 1200);
+        });
+
+        document.getElementById('btnMarkAllAbsent').addEventListener('click', () => {
+          document.querySelectorAll('input[type="radio"][value="Absent"]').forEach(r => r.checked = true);
+          showToast('Updated', 'All students marked as Absent.', 'info', 1200);
+        });
+
+        document.getElementById('btnSaveAttendance').addEventListener('click', async () => {
+          const subject_id = subjectSelect.value;
+          const date = dateInput.value;
+          if (!subject_id || !date) {
+            showToast('Missing Details', 'Please select a subject and date.', 'error');
+            return;
+          }
+
+          const records = [];
+          document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+            records.push({
+              student_id: radio.getAttribute('data-student-id'),
+              status: radio.value
+            });
+          });
+
+          if (records.length === 0) {
+            showToast('No Students', 'No student records to save.', 'error');
+            return;
+          }
+
+          const saveBtn = document.getElementById('btnSaveAttendance');
+          const saveText = document.getElementById('btnSaveAttText');
+          const saveSpin = document.getElementById('btnSaveAttSpinner');
+          saveBtn.disabled = true;
+          saveText.style.display = 'none';
+          saveSpin.style.display = 'inline-block';
+
+          try {
+            const res = await authFetch('/api/attendance', {
+              method: 'POST',
+              body: JSON.stringify({ subject_id, date, records })
+            });
+            const data = await res.json();
+            saveBtn.disabled = false;
+            saveText.style.display = 'inline-block';
+            saveSpin.style.display = 'none';
+
+            if (res.ok && data.success) {
+              showToast('Attendance Recorded! ✅', data.message, 'success');
+              loadStudentRoster(); // Refresh table to update prior percentage
+            } else {
+              showToast('Error', data.message || 'Failed to record attendance.', 'error');
+            }
+          } catch (e) {
+            saveBtn.disabled = false;
+            saveText.style.display = 'inline-block';
+            saveSpin.style.display = 'none';
+            showToast('Network Error', 'Could not record attendance.', 'error');
+          }
+        });
+      }
+
+      // STUDENT ATTENDANCE REPORT LOGIC
+      async function initStudentView(u) {
+        document.getElementById('studentAttendanceView').style.display = 'block';
+
+        let studentId = u.profile ? u.profile.id : null;
+        if (!studentId) {
+          try {
+            const meRes = await authFetch('/api/users/me');
+            const meData = await meRes.json();
+            if (meData.success && meData.profile && meData.profile.id) {
+              studentId = meData.profile.id;
+              u.profile = meData.profile;
+              setCurrentUser(u);
+            }
+          } catch (e) {}
+        }
+
+        const overallVal = document.getElementById('studentOverallAttVal');
+        const headline = document.getElementById('studentAttHeadline');
+        const ratio = document.getElementById('studentAttStatsRatio');
+        const badge = document.getElementById('studentAttStatusBadge');
+        const ring = document.getElementById('studentAttRing');
+
+        const mTotal = document.getElementById('metricTotalLectures');
+        const mPres = document.getElementById('metricAttendedLectures');
+        const mAbs = document.getElementById('metricAbsentLectures');
+
+        if (!studentId) {
+          // Completely clean new student empty state
+          overallVal.textContent = '0%';
+          headline.textContent = 'No Attendance Records Yet';
+          ratio.textContent = '0 attended of 0 total lectures conducted';
+          badge.innerHTML = `<span class="badge badge-neutral">No attendance records yet</span>`;
+          mTotal.textContent = '0';
+          mPres.textContent = '0';
+          mAbs.textContent = '0';
+          ring.style.strokeDashoffset = 377;
+          document.getElementById('studentSubjectAttTableBody').innerHTML = `
+            <tr><td colspan="8" style="text-align:center; padding: 2.5rem; color: var(--text-muted);">No attendance records yet.</td></tr>
+          `;
+          document.getElementById('studentHistoryTableBody').innerHTML = `
+            <tr><td colspan="3" style="text-align:center; padding: 2rem; color: var(--text-muted);">No attendance records yet.</td></tr>
+          `;
+          return;
+        }
+
+        try {
+          const summaryRes = await authFetch(`/api/attendance/summary/${studentId}`);
+          const summaryData = await summaryRes.json();
+          if (summaryData.success) {
+            const s = summaryData.data;
+            mTotal.textContent = s.total_lectures;
+            mPres.textContent = s.present_lectures;
+            mAbs.textContent = s.absent_lectures;
+
+            if (s.total_lectures === 0 || !s.hasRecords) {
+              // Exact requirement 1 & 19: 0% and "No attendance records yet"
+              overallVal.textContent = '0%';
+              headline.textContent = 'No Attendance Records Yet';
+              ratio.textContent = '0 attended of 0 total lectures conducted';
+              badge.innerHTML = `<span class="badge badge-neutral">No attendance records yet</span>`;
+              ring.style.strokeDashoffset = 377;
+              ring.style.stroke = 'var(--border-light)';
+            } else {
+              const pct = s.percentage;
+              overallVal.textContent = `${pct}%`;
+              ratio.textContent = `${s.present_lectures} attended of ${s.total_lectures} total lectures conducted`;
+
+              let ringColor = 'var(--teal)';
+              if (pct >= 75) {
+                headline.textContent = 'Good Standing';
+                badge.innerHTML = `<span class="badge badge-success">Good Standing (≥ 75%)</span>`;
+                ringColor = 'var(--teal)';
+              } else if (pct >= 65) {
+                headline.textContent = 'Needs Improvement';
+                badge.innerHTML = `<span class="badge badge-warning">Needs Improvement (65-74%)</span>`;
+                ringColor = 'var(--golden-yellow)';
+              } else {
+                headline.textContent = 'Low Attendance Alert';
+                badge.innerHTML = `<span class="badge badge-danger">Low Attendance (< 65%)</span>`;
+                ringColor = 'var(--coral)';
+              }
+
+              ring.style.stroke = ringColor;
+              const offset = 377 - (377 * Math.min(pct, 100)) / 100;
+              setTimeout(() => {
+                ring.style.strokeDashoffset = offset;
+              }, 120);
+            }
+
+            // Populate Subject Breakdown Table with full columns per requirement 19
+            const subTbody = document.getElementById('studentSubjectAttTableBody');
+            if (s.subjects && s.subjects.length > 0) {
+              subTbody.innerHTML = s.subjects.map(sub => {
+                const pct = sub.percentage;
+                let colorVar = 'var(--teal)';
+                let badgeCls = 'badge-success';
+                let statusText = 'Good Standing';
+
+                if (sub.total_lectures === 0) {
+                  colorVar = 'var(--text-muted)';
+                  badgeCls = 'badge-neutral';
+                  statusText = 'No records';
+                } else if (pct >= 75) {
+                  colorVar = 'var(--teal)';
+                  badgeCls = 'badge-success';
+                  statusText = 'Good Standing';
+                } else if (pct >= 65) {
+                  colorVar = 'var(--golden-yellow)';
+                  badgeCls = 'badge-warning';
+                  statusText = 'Needs Improvement';
+                } else {
+                  colorVar = 'var(--coral)';
+                  badgeCls = 'badge-danger';
+                  statusText = 'Low Attendance';
+                }
+
+                return `
+                  <tr>
+                    <td><strong>${sub.subject_name}</strong></td>
+                    <td><code>${sub.subject_code}</code></td>
+                    <td style="text-align: center;">${sub.total_lectures}</td>
+                    <td style="text-align: center; color: var(--teal); font-weight: 700;">${sub.present_lectures}</td>
+                    <td style="text-align: center; color: var(--coral); font-weight: 700;">${sub.absent_lectures}</td>
+                    <td style="text-align: center; font-weight: 800; color: ${colorVar};">${pct}%</td>
+                    <td>
+                      <div class="bar-track">
+                        <div class="bar-fill" style="width: ${pct}%; background-color: ${colorVar};"></div>
+                      </div>
+                    </td>
+                    <td style="text-align: center;">
+                      <span class="badge ${badgeCls}">${statusText}</span>
+                    </td>
+                  </tr>
+                `;
+              }).join('');
+            } else {
+              subTbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 2rem; color: var(--text-muted);">No attendance records yet.</td></tr>`;
+            }
+          }
+
+          // Populate History Log
+          const histRes = await authFetch(`/api/attendance?student_id=${studentId}`);
+          const histData = await histRes.json();
+          const histTbody = document.getElementById('studentHistoryTableBody');
+          if (histData.success && histData.data.length > 0) {
+            histTbody.innerHTML = histData.data.slice(0, 15).map(h => `
+              <tr>
+                <td>📅 ${h.date}</td>
+                <td><strong>${h.subject_name}</strong> <span style="font-size:0.75rem; color:var(--text-muted);">(${h.subject_code})</span></td>
+                <td style="text-align: center;">
+                  <span class="badge ${h.status === 'Present' ? 'badge-success' : 'badge-danger'}">
+                    ${h.status === 'Present' ? '✓ Present' : '✗ Absent'}
+                  </span>
+                </td>
+              </tr>
+            `).join('');
+          } else {
+            histTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding: 2rem; color: var(--text-muted);">No lecture logs recorded yet.</td></tr>`;
+          }
+        } catch (e) {
+          console.error('Error loading student attendance:', e);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

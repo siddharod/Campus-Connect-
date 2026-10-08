@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register – CampusConnect</title>
+  <meta name="description" content="Create a new Student or Teacher account on CampusConnect.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="auth-wrapper" style="padding: 3rem 1.5rem;">
+    <div class="auth-card" style="max-width: 580px;">
+      <div class="auth-header">
+        <a href="index.html" class="brand-logo">
+          <div class="brand-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <span class="brand-text">Campus<span>Connect</span></span>
+        </a>
+        <h1>Create Account</h1>
+        <p>Join the digital college portal as a Student or Teacher</p>
+      </div>
+
+      <!-- Role Selector -->
+      <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label class="form-label">I am registering as a:</label>
+        <div class="role-selector" id="regRoleSelector">
+          <button type="button" class="role-tab active" data-role="Student" id="tabRegStudent">
+            🎓 Student
+          </button>
+          <button type="button" class="role-tab" data-role="Teacher" id="tabRegTeacher">
+            👨‍🏫 Teacher / Faculty
+          </button>
+        </div>
+      </div>
+
+      <form id="registerForm" class="auth-form" novalidate>
+        <input type="hidden" id="regRole" name="role" value="Student">
+
+        <!-- Common Name & Email -->
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="regName" class="form-label">Full Name *</label>
+            <input type="text" id="regName" class="form-control" placeholder="e.g. Rahul Sharma" required>
+            <div class="invalid-feedback" id="regNameError">Full name is required.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="regEmail" class="form-label">College Email *</label>
+            <input type="email" id="regEmail" class="form-control" placeholder="name@campusconnect.com" required>
+            <div class="invalid-feedback" id="regEmailError">Valid email address is required.</div>
+          </div>
+        </div>
+
+        <!-- Student Specific Fields -->
+        <div id="studentSpecificFields">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="regRollNo" class="form-label">Roll Number *</label>
+              <input type="text" id="regRollNo" class="form-control" placeholder="e.g. CE120">
+              <div class="invalid-feedback" id="regRollNoError">Roll number is required.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="regPhone" class="form-label">Phone Number</label>
+              <input type="tel" id="regPhone" class="form-control" placeholder="e.g. 9876543210">
+            </div>
+          </div>
+
+          <div class="form-grid-2" style="margin-top: 1rem;">
+            <div class="form-group">
+              <label for="regCourse" class="form-label">Course *</label>
+              <select id="regCourse" class="form-control">
+                <option value="Computer Engineering">Computer Engineering</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Electronics Engineering">Electronics Engineering</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="regYear" class="form-label">Year *</label>
+              <select id="regYear" class="form-control">
+                <option value="First Year">First Year</option>
+                <option value="Second Year" selected>Second Year</option>
+                <option value="Third Year">Third Year</option>
+                <option value="Fourth Year">Fourth Year</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem;">
+            <label for="regDivision" class="form-label">Division</label>
+            <select id="regDivision" class="form-control">
+              <option value="A">Division A</option>
+              <option value="B">Division B</option>
+              <option value="C">Division C</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Teacher Specific Fields -->
+        <div id="teacherSpecificFields" style="display: none;">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="regEmpId" class="form-label">Employee ID *</label>
+              <input type="text" id="regEmpId" class="form-control" placeholder="e.g. EMP2001">
+              <div class="invalid-feedback" id="regEmpIdError">Employee ID is required.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="regTeacherPhone" class="form-label">Phone Number</label>
+              <input type="tel" id="regTeacherPhone" class="form-control" placeholder="e.g. 9820123456">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem;">
+            <label for="regDepartment" class="form-label">Department *</label>
+            <select id="regDepartment" class="form-control">
+              <option value="Computer Engineering">Computer Engineering</option>
+              <option value="Information Technology">Information Technology</option>
+              <option value="Electronics Engineering">Electronics Engineering</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
+              <option value="Applied Sciences">Applied Sciences & Humanities</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Password & Confirm Password -->
+        <div class="form-grid-2" style="margin-top: 1rem;">
+          <div class="form-group">
+            <label for="regPassword" class="form-label">Password * (Min 6 chars)</label>
+            <input type="password" id="regPassword" class="form-control" placeholder="••••••••" required>
+            <div class="invalid-feedback" id="regPasswordError">Password must be at least 6 characters.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="regConfirmPassword" class="form-label">Confirm Password *</label>
+            <input type="password" id="regConfirmPassword" class="form-control" placeholder="••••••••" required>
+            <div class="invalid-feedback" id="regConfirmPasswordError">Passwords do not match.</div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" id="btnRegisterSubmit" style="width: 100%; margin-top: 1.5rem;">
+          <span id="btnRegText">Create Account</span>
+          <span id="btnRegSpinner" class="spinner" style="width: 18px; height: 18px; border-width: 2px; display: none; margin: 0;"></span>
+        </button>
+
+        <div style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+          Already have an account? <a href="login.html" style="color: var(--primary); font-weight: 600;">Sign in here</a>
+        </div>
+
+        <div class="auth-footer" style="margin-top: 1rem;">
+          <a href="index.html" class="back-home-link">← Back to Home</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabStudent = document.getElementById('tabRegStudent');
+      const tabTeacher = document.getElementById('tabRegTeacher');
+      const roleInput = document.getElementById('regRole');
+      const studentFields = document.getElementById('studentSpecificFields');
+      const teacherFields = document.getElementById('teacherSpecificFields');
+      const form = document.getElementById('registerForm');
+
+      const nameInp = document.getElementById('regName');
+      const emailInp = document.getElementById('regEmail');
+      const passInp = document.getElementById('regPassword');
+      const confirmPassInp = document.getElementById('regConfirmPassword');
+      const rollInp = document.getElementById('regRollNo');
+      const empIdInp = document.getElementById('regEmpId');
+
+      tabStudent.addEventListener('click', () => {
+        tabStudent.classList.add('active');
+        tabTeacher.classList.remove('active');
+        roleInput.value = 'Student';
+        studentFields.style.display = 'block';
+        teacherFields.style.display = 'none';
+      });
+
+      tabTeacher.addEventListener('click', () => {
+        tabTeacher.classList.add('active');
+        tabStudent.classList.remove('active');
+        roleInput.value = 'Teacher';
+        studentFields.style.display = 'none';
+        teacherFields.style.display = 'block';
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const role = roleInput.value;
+        const name = nameInp.value.trim();
+        const email = emailInp.value.trim();
+        const password = passInp.value;
+        const confirmPassword = confirmPassInp.value;
+
+        let hasError = false;
+
+        if (!name) {
+          showError(nameInp, 'regNameError', 'Full name is required.');
+          hasError = true;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          showError(emailInp, 'regEmailError', 'Please enter a valid email address.');
+          hasError = true;
+        }
+
+        if (password.length < 6) {
+          showError(passInp, 'regPasswordError', 'Password must be at least 6 characters.');
+          hasError = true;
+        }
+
+        if (password !== confirmPassword) {
+          showError(confirmPassInp, 'regConfirmPasswordError', 'Passwords do not match.');
+          hasError = true;
+        }
+
+        const payload = {
+          role,
+          name,
+          email,
+          password,
+          confirmPassword
+        };
+
+        if (role === 'Student') {
+          const roll_no = rollInp.value.trim();
+          if (!roll_no) {
+            showError(rollInp, 'regRollNoError', 'Roll number is required.');
+            hasError = true;
+          }
+          payload.roll_no = roll_no;
+          payload.course = document.getElementById('regCourse').value;
+          payload.year = document.getElementById('regYear').value;
+          payload.division = document.getElementById('regDivision').value;
+          payload.phone = document.getElementById('regPhone').value.trim();
+        } else {
+          const empId = empIdInp.value.trim();
+          if (!empId) {
+            showError(empIdInp, 'regEmpIdError', 'Employee ID is required.');
+            hasError = true;
+          }
+          payload.employee_id = empId;
+          payload.department = document.getElementById('regDepartment').value;
+          payload.phone = document.getElementById('regTeacherPhone').value.trim();
+        }
+
+        if (hasError) return;
+
+        setLoading(true);
+
+        try {
+          const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          setLoading(false);
+
+          if (res.ok && data.success) {
+            showToast('Account Created! 🎉', 'Redirecting to login portal...', 'success', 2500);
+            setTimeout(() => {
+              window.location.href = `login.html?role=${role}&registered=true`;
+            }, 1200);
+          } else {
+            showToast('Registration Error', data.message || 'Failed to create account.', 'error');
+            if (data.message && data.message.includes('Roll Number')) {
+              showError(rollInp, 'regRollNoError', data.message);
+            }
+            if (data.message && data.message.includes('email already exists')) {
+              showError(emailInp, 'regEmailError', data.message);
+            }
+          }
+        } catch (err) {
+          setLoading(false);
+          console.error(err);
+          showToast('Network Error', 'Could not communicate with the server.', 'error');
+        }
+      });
+
+      function showError(inputEl, errId, msg) {
+        inputEl.classList.add('is-invalid');
+        const errEl = document.getElementById(errId);
+        if (errEl) {
+          errEl.textContent = msg;
+          errEl.classList.add('show');
+        }
+      }
+
+      function clearErrors() {
+        document.querySelectorAll('.form-control').forEach(el => el.classList.remove('is-invalid'));
+        document.querySelectorAll('.invalid-feedback').forEach(el => el.classList.remove('show'));
+      }
+
+      function setLoading(isLoading) {
+        const btn = document.getElementById('btnRegisterSubmit');
+        const text = document.getElementById('btnRegText');
+        const spinner = document.getElementById('btnRegSpinner');
+        if (isLoading) {
+          btn.disabled = true;
+          text.style.display = 'none';
+          spinner.style.display = 'inline-block';
+        } else {
+          btn.disabled = false;
+          text.style.display = 'inline-block';
+          spinner.style.display = 'none';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

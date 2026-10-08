@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CampusConnect – College Student Management System</title>
+  <meta name="description" content="A simple, friendly and modern platform for college students and teachers to manage student information and records.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="public-nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand-logo" id="navLogo">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+        </div>
+        <span class="brand-text">Campus<span>Connect</span></span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#home" class="nav-link active">Home</a></li>
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline" id="btnNavLogin">Login</a>
+        <a href="register.html" class="btn btn-primary" id="btnNavRegister">Register</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="home">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-pill">
+          <span class="status-dot"></span>
+          CampusConnect Portal v2.0 • Full-Fledged College Management Platform
+        </div>
+        <h1 class="hero-title">Your College, <span>Connected.</span></h1>
+        <p class="hero-subtitle">
+          A unified, fully-functional digital campus platform for students and faculty. Manage student records, real-time attendance, semester marks, weekly timetables, and campus notices with persistent SQLite database backing.
+        </p>
+        <div class="hero-buttons">
+          <a href="login.html" class="btn btn-primary btn-lg" id="btnHeroLogin">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+            Portal Login
+          </a>
+          <a href="register.html" class="btn btn-secondary btn-lg" id="btnHeroRegister">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="20" y1="8" x2="20" y2="14"></line>
+              <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>
+            Create Account
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Key Highlights</span>
+        <h2 class="section-title">Designed for Everyday Campus Life</h2>
+        <p class="section-desc">Everything professors and students need to stay synchronized without clutter or technical complexity.</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper icon-blue">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3>Student Management</h3>
+          <p>Instant CRUD records, course, year, and division filters, live search, and sorting with persistent SQLite database backing.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper icon-purple">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h3>Real-Time Attendance</h3>
+          <p>Batch attendance marking for faculty with auto-calculated student attendance percentage and detailed course log history.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper icon-emerald">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <h3>Marks & Performance</h3>
+          <p>Internal and external assessment scoring with automatic letter grade calculation (A+ through F) and cumulative CGPA generation.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper icon-amber">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Weekly Timetable</h3>
+          <p>Interactive Monday–Saturday classroom schedule grid with room assignments, timings, and faculty schedule tracking.</p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper icon-blue">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+          </div>
+          <h3>Campus Notices & Alerts</h3>
+          <p>Urgent announcements categorized by Academic, Examination, and Events with automatic student notification alerts.</p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper icon-purple">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </div>
+          <h3>Dark Mode & Fluid UI</h3>
+          <p>Modern theme switching with persistent local storage, micro-animations, animated progress rings, and responsive cards.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" id="about">
+    <div class="container">
+      <div class="about-card">
+        <div class="about-text">
+          <span class="section-tag">About CampusConnect</span>
+          <h2>A Modern Digital Interface for College Operations</h2>
+          <p>
+            CampusConnect provides a simple digital interface for students and teachers to access and manage college information. By replacing cumbersome manual spreadsheets with an intuitive system, faculty can manage student records seamlessly while learners easily track their academic profile.
+          </p>
+          <p>
+            Built as a lightweight, clean, full-stack application backed by Node.js, Express, and SQLite3, CampusConnect focuses on what matters most: speed, clarity, and ease of use.
+          </p>
+          <ul class="about-list">
+            <li class="about-item">
+              <span class="about-badge">✓</span>
+              <span>Full CRUD management: Create, Read, Update, Delete records</span>
+            </li>
+            <li class="about-item">
+              <span class="about-badge">✓</span>
+              <span>Clean REST APIs with instant client feedback and validation</span>
+            </li>
+            <li class="about-item">
+              <span class="about-badge">✓</span>
+              <span>Role-specific views for students and faculty</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="about-preview">
+          <div class="about-preview-card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+              <span class="badge badge-primary">Computer Engineering</span>
+              <span class="badge badge-success">Active Enrolled</span>
+            </div>
+            <h4 style="font-size: 1.1rem; margin-bottom: 0.25rem;">Rahul Sharma</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Roll No: CE101 • Second Year (Div A)</p>
+            <div style="background-color: #f8fafc; padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--text-secondary);">
+              <strong>Email:</strong> rahul.sharma@campusconnect.com<br>
+              <strong>Attendance:</strong> 85% (Good Standing)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="public-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="brand-logo">
+          <div class="brand-icon" style="width: 32px; height: 32px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <span>CampusConnect – College Student Management System</span>
+        </div>
+        <div class="footer-copyright">
+          © 2026 CampusConnect. All rights reserved. Designed for modern college workflows.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard – CampusConnect</title>
+  <meta name="description" content="Unified student academic portal for tracking attendance, examination results, timetable, and campus circulars.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- Dark Navy Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <a href="student-dashboard.html" class="brand-logo">
+          <div class="brand-icon" style="width: 34px; height: 34px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+          </div>
+          <span class="brand-text">Campus<span>Connect</span></span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="student-dashboard.html" class="nav-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="attendance.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+          <span>My Attendance</span>
+        </a>
+        <a href="marks.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          <span>My Results</span>
+        </a>
+        <a href="timetable.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+          <span>Timetable</span>
+        </a>
+        <a href="notices.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span>Notices</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>My Profile</span>
+        </a>
+        <a href="settings.html" class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-mini-profile">
+          <div class="user-avatar" id="sidebarUserAvatar">U</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUserName">Student</div>
+            <div class="user-role" id="sidebarUserRole">Student</div>
+          </div>
+        </div>
+        <button class="btn-logout" id="btnLogout" onclick="logout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="app-main">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <h2 class="page-title">Student Academic Cockpit</h2>
+        </div>
+
+        <div class="topbar-right">
+          <button class="notif-bell-btn" id="notifBellBtn" title="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header"><h4>Campus Notifications</h4></div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+          <span class="topbar-badge" id="topbarTermBadge">
+            <span class="status-dot"></span>
+            <span id="topbarCohortText">Active Semester</span>
+          </span>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <!-- Dynamic Welcome Banner -->
+        <div class="welcome-banner animate-fade-in">
+          <h1 id="studentGreetingBanner">Good morning, Student</h1>
+          <p id="studentGreetingSub">Here's what's happening on your campus today.</p>
+        </div>
+
+        <!-- 4 Statistics Cards -->
+        <div class="stats-grid">
+          <!-- Attendance Card -->
+          <div class="stat-card animate-fade-in animate-delay-1">
+            <div class="stat-info">
+              <div class="stat-label">Attendance</div>
+              <div class="stat-value" id="cardAttendanceVal" style="color: var(--teal);">--</div>
+              <div class="stat-sub" id="cardAttendanceSub">Checking records...</div>
+            </div>
+            <div class="stat-icon icon-emerald">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+            </div>
+          </div>
+
+          <!-- Current CGPA Card -->
+          <div class="stat-card animate-fade-in animate-delay-2">
+            <div class="stat-info">
+              <div class="stat-label">Current CGPA</div>
+              <div class="stat-value" id="cardCgpaVal" style="color: var(--coral);">--</div>
+              <div class="stat-sub" id="cardCgpaSub">Based on exam results</div>
+            </div>
+            <div class="stat-icon icon-purple">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+          </div>
+
+          <!-- Enrolled Subjects Card -->
+          <div class="stat-card animate-fade-in animate-delay-3">
+            <div class="stat-info">
+              <div class="stat-label">Enrolled Subjects</div>
+              <div class="stat-value" id="cardSubjectsVal">--</div>
+              <div class="stat-sub" id="cardSubjectsSub">Current Semester</div>
+            </div>
+            <div class="stat-icon icon-blue">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            </div>
+          </div>
+
+          <!-- Pending Tasks Card -->
+          <div class="stat-card animate-fade-in animate-delay-4">
+            <div class="stat-info">
+              <div class="stat-label">Pending Tasks</div>
+              <div class="stat-value" id="cardTasksVal" style="color: var(--golden-yellow);">0</div>
+              <div class="stat-sub" id="cardTasksSub">You're all caught up.</div>
+            </div>
+            <div class="stat-icon icon-amber">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions Row -->
+        <div class="card animate-fade-in" style="margin-bottom: 2rem; padding: 1.25rem 1.75rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <strong style="font-size: 1rem; color: var(--deep-navy); display: block;">Academic Quick Actions</strong>
+              <span style="font-size: 0.825rem; color: var(--text-secondary);">Your semester at a glance. Access modules instantly.</span>
+            </div>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <a href="attendance.html" class="btn btn-primary btn-sm">📊 View Attendance</a>
+              <a href="marks.html" class="btn btn-secondary btn-sm">🎓 View Results</a>
+              <a href="timetable.html" class="btn btn-outline btn-sm">📅 View Timetable</a>
+              <a href="notices.html" class="btn btn-secondary btn-sm">📢 View Notices</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attendance Ring & Academic Performance Charts -->
+        <div class="dashboard-grid">
+          <!-- Circular Attendance Indicator -->
+          <div class="card animate-fade-in" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
+            <div class="content-card-header" style="width: 100%;">
+              <h3 class="content-card-title">Attendance Overview</h3>
+              <a href="attendance.html" class="btn btn-outline btn-sm">Full Report →</a>
+            </div>
+
+            <div class="progress-circle-wrap" style="margin: 1.25rem 0;">
+              <svg class="progress-circle-svg" viewBox="0 0 140 140">
+                <circle class="progress-circle-bg" cx="70" cy="70" r="60"></circle>
+                <circle class="progress-circle-bar" id="dashAttRing" cx="70" cy="70" r="60"></circle>
+              </svg>
+              <div class="progress-circle-text">
+                <div class="progress-circle-value" id="dashAttVal">0%</div>
+                <div class="progress-circle-label" id="dashAttLabel">Calculating...</div>
+              </div>
+            </div>
+
+            <div id="dashAttBadgeContainer">
+              <span class="badge badge-neutral" id="dashAttBadge">Loading records...</span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.75rem;" id="dashAttMicrocopy">
+              Calculated strictly from actual recorded classroom logs.
+            </p>
+          </div>
+
+          <!-- Academic Performance Bar Chart -->
+          <div class="card animate-fade-in">
+            <div class="content-card-header">
+              <h3 class="content-card-title">Academic Subject Performance</h3>
+              <a href="marks.html" class="btn btn-outline btn-sm">Report Card →</a>
+            </div>
+            <div class="bar-chart-container" id="dashMarksChartBox">
+              <div style="padding: 2.5rem 1rem; text-align: center; color: var(--text-muted);">
+                <div class="spinner spinner-primary"></div>
+                <div style="margin-top: 0.5rem; font-size: 0.85rem;">Loading academic performance...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Classes & Recent Notices -->
+        <div class="dashboard-grid" style="margin-top: 2rem;">
+          <!-- Upcoming Classes Today -->
+          <div class="card animate-fade-in">
+            <div class="content-card-header">
+              <h3 class="content-card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                Today's Lecture Schedule
+              </h3>
+              <a href="timetable.html" class="btn btn-outline btn-sm">Full Timetable →</a>
+            </div>
+            <div id="dashTodayClassesContainer" style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <div style="padding: 1.5rem; text-align: center; color: var(--text-muted);">Loading lecture schedule...</div>
+            </div>
+          </div>
+
+          <!-- Recent Notices Bulletin -->
+          <div class="card animate-fade-in">
+            <div class="content-card-header">
+              <h3 class="content-card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                Latest Campus Notices
+              </h3>
+              <a href="notices.html" class="btn btn-outline btn-sm">All Notices →</a>
+            </div>
+            <div class="notice-list" id="dashRecentNoticesContainer">
+              <div style="padding: 1.5rem; text-align: center; color: var(--text-muted);">Loading circulars...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = protectPage('Student');
+      if (!user) return;
+
+      // Personalized greeting per requirement 18
+      const hour = new Date().getHours();
+      let greetingPrefix = 'Good morning';
+      if (hour >= 12 && hour < 17) greetingPrefix = 'Good afternoon';
+      else if (hour >= 17) greetingPrefix = 'Good evening';
+      
+      const firstName = user.name ? user.name.split(' ')[0] : 'Student';
+      document.getElementById('studentGreetingBanner').textContent = `${greetingPrefix}, ${firstName}`;
+      document.getElementById('studentGreetingSub').textContent = "Here's what's happening on your campus today.";
+
+      // Obtain accurate student profile
+      let studentProfile = user.profile || null;
+      let studentId = studentProfile && studentProfile.id ? studentProfile.id : null;
+
+      try {
+        const meRes = await authFetch('/api/users/me');
+        const meData = await meRes.json();
+        if (meData.success && meData.profile && meData.profile.id) {
+          studentProfile = meData.profile;
+          studentId = studentProfile.id;
+          user.profile = studentProfile;
+          setCurrentUser(user);
+        }
+      } catch (e) {
+        console.error('Error fetching student profile:', e);
+      }
+
+      if (studentProfile) {
+        const cohort = `${studentProfile.course || 'Engineering'} • ${studentProfile.year || 'Student'} (Div ${studentProfile.division || 'A'})`;
+        document.getElementById('topbarCohortText').textContent = cohort;
+        document.getElementById('cardSubjectsSub').textContent = studentProfile.course || 'Enrolled Course';
+      }
+
+      // 1. REAL ATTENDANCE LOGIC
+      const cardAtt = document.getElementById('cardAttendanceVal');
+      const cardAttSub = document.getElementById('cardAttendanceSub');
+      const dashAttVal = document.getElementById('dashAttVal');
+      const dashAttLabel = document.getElementById('dashAttLabel');
+      const dashAttBadge = document.getElementById('dashAttBadge');
+      const dashAttRing = document.getElementById('dashAttRing');
+
+      if (studentId) {
+        try {
+          const attRes = await authFetch(`/api/attendance/summary/${studentId}`);
+          const attData = await attRes.json();
+          if (attData.success) {
+            const d = attData.data;
+            if (d.total_lectures === 0 || !d.hasRecords) {
+              // Exact requirement 1 & 2: 0% and "No attendance records yet"
+              cardAtt.textContent = '0%';
+              cardAtt.style.color = 'var(--text-muted)';
+              cardAttSub.textContent = 'No attendance records yet';
+              dashAttVal.textContent = '0%';
+              dashAttLabel.textContent = 'No records';
+              dashAttBadge.className = 'badge badge-neutral';
+              dashAttBadge.textContent = 'No attendance records yet';
+              dashAttRing.style.strokeDashoffset = 377;
+              dashAttRing.style.stroke = 'var(--border-light)';
+            } else {
+              const pct = d.percentage;
+              animateCount(cardAtt, `${pct}%`, 800);
+              cardAttSub.textContent = `${d.present_lectures} attended of ${d.total_lectures} lectures`;
+              dashAttVal.textContent = `${pct}%`;
+              dashAttLabel.textContent = `${d.present_lectures}/${d.total_lectures} Present`;
+
+              let ringColor = 'var(--teal)';
+              if (pct >= 75) {
+                cardAtt.style.color = 'var(--teal)';
+                dashAttBadge.className = 'badge badge-success';
+                dashAttBadge.textContent = 'Good Standing (≥ 75%)';
+                ringColor = 'var(--teal)';
+              } else if (pct >= 65) {
+                cardAtt.style.color = 'var(--golden-yellow)';
+                dashAttBadge.className = 'badge badge-warning';
+                dashAttBadge.textContent = 'Needs Improvement (65-74%)';
+                ringColor = 'var(--golden-yellow)';
+              } else {
+                cardAtt.style.color = 'var(--coral)';
+                dashAttBadge.className = 'badge badge-danger';
+                dashAttBadge.textContent = 'Low Attendance (< 65%)';
+                ringColor = 'var(--coral)';
+              }
+
+              dashAttRing.style.stroke = ringColor;
+              const offset = 377 - (377 * Math.min(pct, 100)) / 100;
+              setTimeout(() => {
+                dashAttRing.style.strokeDashoffset = offset;
+              }, 120);
+            }
+          }
+        } catch (e) {
+          console.error('Error fetching attendance summary:', e);
+          cardAtt.textContent = '0%';
+          cardAttSub.textContent = 'No attendance records yet';
+          dashAttVal.textContent = '0%';
+          dashAttBadge.textContent = 'No attendance records yet';
+        }
+      } else {
+        cardAtt.textContent = '0%';
+        cardAttSub.textContent = 'No attendance records yet';
+        dashAttVal.textContent = '0%';
+        dashAttBadge.className = 'badge badge-neutral';
+        dashAttBadge.textContent = 'No attendance records yet';
+      }
+
+      // 2. REAL MARKS & CGPA LOGIC
+      const cardCgpa = document.getElementById('cardCgpaVal');
+      const cardCgpaSub = document.getElementById('cardCgpaSub');
+      const chartBox = document.getElementById('dashMarksChartBox');
+
+      if (studentId) {
+        try {
+          const marksRes = await authFetch(`/api/marks/student/${studentId}`);
+          const marksData = await marksRes.json();
+          if (marksData.success) {
+            const md = marksData.data;
+            if (md.hasMarks && md.marks.length > 0) {
+              animateCount(cardCgpa, md.cgpa, 900);
+              cardCgpaSub.textContent = `Avg Score: ${md.averageScore}% across ${md.totalSubjects} subjects`;
+              document.getElementById('cardSubjectsVal').textContent = md.totalSubjects;
+
+              chartBox.innerHTML = md.marks.slice(0, 4).map(m => `
+                <div class="bar-item">
+                  <div class="bar-info">
+                    <span>${m.subject_name}</span>
+                    <span style="color: var(--teal);">${m.total_marks}/100 • Grade ${m.grade}</span>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: ${m.total_marks}%;"></div>
+                  </div>
+                </div>
+              `).join('');
+            } else {
+              // Exact requirement 1, 2, 7: CGPA -> "--", "No marks available"
+              cardCgpa.textContent = '--';
+              cardCgpaSub.textContent = 'No marks available';
+              chartBox.innerHTML = `
+                <div class="empty-state" style="padding: 2.5rem 1rem;">
+                  <div class="empty-state-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                  </div>
+                  <div class="empty-state-title">No marks available</div>
+                  <div class="empty-state-desc">Your examination results have not been published yet.</div>
+                </div>
+              `;
+            }
+          }
+        } catch (e) {
+          console.error('Error fetching marks summary:', e);
+          cardCgpa.textContent = '--';
+          cardCgpaSub.textContent = 'No marks available';
+        }
+      } else {
+        cardCgpa.textContent = '--';
+        cardCgpaSub.textContent = 'No marks available';
+      }
+
+      // Fetch Subject Count if marks was empty
+      if (studentProfile && studentProfile.course) {
+        try {
+          const subRes = await authFetch(`/api/subjects?course=${encodeURIComponent(studentProfile.course)}`);
+          const subData = await subRes.json();
+          if (subData.success) {
+            document.getElementById('cardSubjectsVal').textContent = subData.count || 0;
+          }
+        } catch (e) {}
+      }
+
+      // 3. TODAY'S CLASSES TIMETABLE
+      try {
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayIndex = new Date().getDay();
+        const currentDay = dayIndex === 0 ? 'Monday' : dayNames[dayIndex];
+        const studentCourse = studentProfile ? studentProfile.course : 'Computer Engineering';
+
+        const ttRes = await authFetch(`/api/timetable?day=${encodeURIComponent(currentDay)}&course=${encodeURIComponent(studentCourse)}`);
+        const ttData = await ttRes.json();
+        const ttContainer = document.getElementById('dashTodayClassesContainer');
+
+        if (ttData.success && ttData.data.length > 0) {
+          ttContainer.innerHTML = ttData.data.slice(0, 3).map(c => `
+            <div class="class-slot">
+              <div class="class-time">${c.time_slot}</div>
+              <div class="class-name">${c.subject_name}</div>
+              <div class="class-meta">
+                <span>📍 ${c.room}</span>
+                <span>👨‍🏫 ${c.teacher_name}</span>
+              </div>
+            </div>
+          `).join('');
+        } else {
+          ttContainer.innerHTML = `
+            <div class="empty-state" style="padding: 2rem 1rem;">
+              <div class="empty-state-title">No lectures scheduled today</div>
+              <div class="empty-state-desc">Take time for self-study or consult the weekly timetable.</div>
+            </div>
+          `;
+        }
+      } catch (e) {
+        console.error('Error loading timetable:', e);
+      }
+
+      // 4. RECENT NOTICES
+      try {
+        const nRes = await authFetch('/api/notices');
+        const nData = await nRes.json();
+        const nContainer = document.getElementById('dashRecentNoticesContainer');
+
+        if (nData.success && nData.data.length > 0) {
+          nContainer.innerHTML = nData.data.slice(0, 3).map(n => `
+            <div class="notice-item" onclick="window.location.href='notices.html'" style="cursor: pointer;">
+              <div class="notice-title">${n.title}</div>
+              <div class="notice-desc">${n.description.substring(0, 95)}...</div>
+              <div class="notice-date">📅 ${n.date} • <span class="badge badge-neutral" style="font-size: 0.7rem; padding: 0.1rem 0.45rem;">${n.category}</span></div>
+            </div>
+          `).join('');
+        } else {
+          nContainer.innerHTML = `
+            <div class="empty-state" style="padding: 2rem 1rem;">
+              <div class="empty-state-title">No notices available</div>
+              <div class="empty-state-desc">You're all caught up on official circulars.</div>
+            </div>
+          `;
+        }
+      } catch (e) {
+        console.error('Error loading notices:', e);
+      }
+    });
+  </script>
+</body>
+</html>
