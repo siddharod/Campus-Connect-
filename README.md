@@ -47,12 +47,7 @@ npm run dev
 
 > Server starts at **http://localhost:3000**
 
-### Demo Credentials
 
-| Role | Email | Password |
-|---|---|---|
-| **Teacher** | teacher@campusconnect.com | teacher123 |
-| **Student** | student@campusconnect.com | student123 |
 
 ---
 
